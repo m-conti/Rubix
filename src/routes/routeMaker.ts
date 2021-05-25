@@ -13,10 +13,11 @@ const composeMiddleware = (
 
   if (!middleware) return Component;
 
-  const withMiddleware: tPageMiddleware = middlewaresHandled.asget(
+  const withMiddleware: tPageMiddleware = get(
+    middlewaresHandled,
     middleware,
     (arg: ComponentType): ComponentType => arg
-  ) as tPageMiddleware;
+  );
 
   return composeMiddleware(withMiddleware(Component), middlewares);
 };
@@ -51,22 +52,6 @@ const routePage = (
     ])
   );
 };
-
-// const routePage = ({ name, component, locale = 'fr', middlewares = [], exact = false,
-// proprety, pages, route = '', prefix = '', ...root }: IPage) => {
-//   const path = route + get(root, `path${upperFirst(locale)}`, root.path);
-//   const locate = `${prefix}${prefix ? '.' : ''}${name}`;
-//   if (component)
-//     return { name: locate, locale, path, exact, component: composeMiddleware(component, middlewares), ...proprety }
-//   return map(pages, ({ middlewares: pageMiddlewares = [], ...page }) => routePage({
-//     ...page,
-//     route: path,
-//     middlewares: [ ...middlewares, ...pageMiddlewares ],
-//     locale,
-//     prefix: locate,
-//     proprety,
-//   }));
-// };
 
 const middlewaresHandled: IPageMiddlewareList = {};
 

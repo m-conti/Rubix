@@ -7,8 +7,8 @@ const Counter: FunctionComponent = () => {
   const randomize = () => {
     import('lodash').then(({ random }: { random: Function }) => {
       changeCount(random(0, 100));
-    })
-  }
+    });
+  };
 
   const changeCount = (value: number) => {
     setCount(value);
@@ -21,7 +21,7 @@ const Counter: FunctionComponent = () => {
       <button className={classes.add} onClick={() => changeCount(count + 1)}>Add</button>
     </div>
     <button className={classes.random} onClick={randomize}>Random</button>
-  </div>
-}
+  </div>;
+};
 
 export default Counter;

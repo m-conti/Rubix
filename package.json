@@ -78,6 +78,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.11.4",
+    "@material-ui/icons": "^4.11.2",
     "@react-three/fiber": "^6.1.2",
     "express": "4.17.1",
     "i18next": "^20.2.2",

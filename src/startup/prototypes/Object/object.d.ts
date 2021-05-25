@@ -28,7 +28,7 @@ declare global {
     aslength(): number;
     asclone(): object;
     ascheck(
-      select: 'every' | 'some' | 'none',
+      select: 'every' | 'some' | 'none' | 'match' | 'equal' | 'empty',
       predicate: ConformsPredicateObject<object> | object
     ): boolean;
     astype(

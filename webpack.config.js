@@ -88,7 +88,7 @@ let config = {
         ],
       },
       {
-        test: /\.jsx?$/,
+        test: /\.jsx?$/i,
         exclude: /(node_modules|\.worker\.js$)/,
         use: [
           { loader: 'react-hot-loader/webpack' },
@@ -97,7 +97,7 @@ let config = {
         resolve: { fullySpecified: false }
       },
       {
-        test: /\.tsx?$/,
+        test: /\.tsx?$/i,
         exclude: /node_modules/,
         use: [
           { loader: 'react-hot-loader/webpack' },
@@ -112,7 +112,7 @@ let config = {
       },
       // config
       {
-        test: /\.ya?ml$/,
+        test: /\.ya?ml$/i,
         type: 'json',
         use: [
           { loader: 'yaml-loader' }

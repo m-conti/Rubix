@@ -1,10 +1,10 @@
 import React, {
   useState,
+  useEffect,
+  useRef,
   forwardRef,
-  createRef,
   ReactNode,
-  KeyboardEventHandler,
-  KeyboardEvent,
+  KeyboardEvent as RKeyboardEvent,
   ComponentType,
   Ref
 } from 'react';
@@ -17,38 +17,54 @@ interface IProps {
 
 interface IChildProps {
   ref: Ref<unknown>
-  actionKeys: (event: KeyboardEvent<Element>) => void
+  actionKeys: (event: RKeyboardEvent | KeyboardEvent) => void
   focusKeys: () => void
   setKeys: React.Dispatch<React.SetStateAction<IKeys>>
 }
 
 interface IKeys {
-  [key: string]: (event: KeyboardEvent) => void
+  [key: string]: (event: RKeyboardEvent | KeyboardEvent) => void
 }
 
-export default (Component: ComponentType<IChildProps>): ReactNode => forwardRef(
+export default (Component: ComponentType<IChildProps>, focusNeeded = true): ReactNode => forwardRef(
   ({ tabIndex = 0, ...props }: IProps, ref) => {
 
     const [ keys, setKeys ] = useState<IKeys>({});
-    const refKey = createRef<HTMLDivElement>();
+    const refKey = useRef<HTMLDivElement>(null);
 
-    const actions: KeyboardEventHandler = (event) => {
+    const actions = (event: RKeyboardEvent | KeyboardEvent) => {
       const action = keys[event.key];
+
       if (action) {
-        event.preventDefault();
-        event.stopPropagation();
+        event?.preventDefault();
+        event?.stopPropagation();
         action(event);
       }
       return event;
     };
 
-    return <div className={classes.map} onKeyDown={actions} ref={refKey} tabIndex={tabIndex}>
+    useEffect(() => {
+      if (focusNeeded) return;
+
+      window.addEventListener('keydown', actions);
+      return () => window.removeEventListener('keydown', actions);
+    }, [keys]);
+
+    return focusNeeded ?
+      <div className={classes.map} onKeyDown={focusNeeded ? actions : undefined} ref={refKey} tabIndex={tabIndex}>
+        <Component
+          ref={ref}
+          {...props}
+          actionKeys={actions}
+          focusKeys={() => refKey.current?.focus()}
+          setKeys={setKeys}
+        />
+      </div> :
       <Component
         ref={ref}
         {...props}
         actionKeys={actions}
-        focusKeys={() => refKey.current?.focus()}
+        focusKeys={() => null}
         setKeys={setKeys}
-      />
-    </div>;
+      />;
   });

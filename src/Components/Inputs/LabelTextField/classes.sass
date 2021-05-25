@@ -1,0 +1,27 @@
+.container
+  display: flex
+  flex-direction: column
+
+  .title
+    margin-bottom: 10px
+
+.field
+  display: flex
+  flex-direction: column
+  padding: 2px
+  cursor: text
+
+  .list
+    display: flex
+    flex-direction: row
+    flex-wrap: wrap
+
+    .chip
+      margin: 2px
+
+  .input
+    display: flex
+    &::before
+      content: none
+    &::after
+      content: none
