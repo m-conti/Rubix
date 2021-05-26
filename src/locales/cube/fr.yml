@@ -1,0 +1,6 @@
+menu:
+  mix:
+    title: Mélange
+    placeholder: mouvements en notation internationale
+    reset: Réinitialiser
+    apply: Appliquer

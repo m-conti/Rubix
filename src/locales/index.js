@@ -2,13 +2,13 @@ import mapValues from 'lodash/mapValues';
 import get from 'lodash/get';
 
 import * as btn from './btn';
-import * as post from './post';
-import * as album from './album';
+import * as cube from './cube';
+import * as input from './input';
 
 const selectLangage = (locale) => mapValues({
   btn,
-  post,
-  album
+  cube,
+  input,
 }, (trads) => get(trads, locale));
 
 export const fr = selectLangage('fr');

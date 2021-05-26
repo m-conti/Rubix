@@ -1,0 +1,6 @@
+menu:
+  mix:
+    title: Mix parser
+    placeholder: movements in international notation
+    reset: Reset
+    apply: Apply

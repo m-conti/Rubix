@@ -13,6 +13,9 @@ import useKeyPress from 'Hooks/useKeyPress';
 import Input, { InputProps } from '@material-ui/core/Input';
 import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
+import IconButton from '@material-ui/core/IconButton';
+
+import ClearIcon from '@material-ui/icons/Clear';
 
 import classes from './classes.sass';
 
@@ -24,12 +27,14 @@ interface IState {
 interface ILabelTextFieldProps extends InputProps {
   labelsChange?: (labels: string[]) => string[];
   classes?: {
+    clearButton ?: string,
     field?: string,
     input?: string,
     label?: string
     labels?: string,
     title?: string,
   };
+  clearable?: boolean;
 }
 
 interface ILabelTextFieldRef {
@@ -42,7 +47,7 @@ const defaultState: IState = {
 };
 
 const LabelTextField = (
-  { labelsChange, classes: outerClasses, ...props }: ILabelTextFieldProps,
+  { labelsChange, classes: outerClasses, placeholder, clearable = true, ...props }: ILabelTextFieldProps,
   ref: Ref<ILabelTextFieldRef>
 ) => {
 
@@ -75,6 +80,10 @@ const LabelTextField = (
     });
   };
 
+  const clearState = () => {
+    setState(defaultState);
+  };
+
   useEffect(() => {
     if (!labelsChange) return;
     const newLabels = labelsChange(state.labels);
@@ -88,11 +97,22 @@ const LabelTextField = (
   });
 
   return <div className={[ classes.container, props.className ].join(' ')} onClick={() => input.current?.focus()}>
-    <label className={[ classes.title, outerClasses?.asget('title') ]. join(' ')}>{props.title}</label>
-    <Paper className={[ classes.field, outerClasses?.asget('field') ].join(' ')} elevation={3}>
-      <div className={[ classes.list, outerClasses?.asget('labels') ]. join(' ')}>
+    <div className={ classes.header }>
+      <label className={[ classes.title, outerClasses?.title ]. join(' ')}>{props.title}</label>
+      { clearable && state.labels.length ?
+        <IconButton
+          className={[ classes.clearButton, outerClasses?.clearButton ].join(' ')}
+          color='secondary'
+          onClick={clearState}
+          size='small'
+        ><ClearIcon className={classes.clearIcon} fontSize='inherit' /></IconButton> :
+        null
+      }
+    </div>
+    <Paper className={[ classes.field, outerClasses?.field ].join(' ')} elevation={3}>
+      <div className={[ classes.list, outerClasses?.labels ]. join(' ')}>
         {state.labels.asmap((label: string, index: number) => <Chip
-          className={[ classes.chip, outerClasses?.asget('label') ].join(' ')}
+          className={[ classes.chip, outerClasses?.label ].join(' ')}
           clickable
           key={index}
           label={label}
@@ -101,12 +121,13 @@ const LabelTextField = (
       </div>
       <Input
         {...props}
-        className={[ classes.input, outerClasses?.asget('input') ].join(' ')}
+        className={[ classes.input, outerClasses?.input ].join(' ')}
         inputRef={input}
         multiline
         onBlur={() => setFocused(false)}
         onChange={inputChangeHandler}
         onFocus={() => setFocused(true)}
+        placeholder={state.labels.length ? '' : placeholder}
         value={state.value}
       />
     </Paper>
